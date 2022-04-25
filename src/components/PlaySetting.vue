@@ -18,7 +18,7 @@
         </div>
         <div class="input-group mb-3">
           <span class="input-group-text" id="basic-addon1">播放</span>
-          <select class="form-select" aria-label="Default select example">
+          <select class="form-select" aria-label="Default select example" v-model="loop">
             <option value="loop">单曲循环</option>
             <option value="listloop">列表循环</option>
             <option value="random">随机播放</option>
@@ -60,6 +60,7 @@ export default {
       res: null,
       Mylist: [],
       background: "",
+      loop:''
     };
   },
 
@@ -127,6 +128,9 @@ export default {
     background() {
       document.querySelector("body").style.backgroundImage = `url(${this.background})`;
     },
+    loop(){
+        this.$parent.loop = this.loop
+    }
   },
 };
 </script>

@@ -2,7 +2,7 @@
   <div class="background" id="player">
     <login-w :qr="qr"></login-w>
     <play-list :list="list"></play-list>
-    <main-body :id="id" :index="index" ref="child"></main-body>
+    <main-body :id="id" :index="index" ref="child" :loop="loop"></main-body>
     <play-setting></play-setting>
   </div>
 </template>
@@ -19,6 +19,7 @@ export default {
       index: 0,
       list: [{ index:9,song:"好きだから。",singer:"『ユイカ』",id: 1856722728 }],
       qr: "",
+      loop:''
     };
   },
   methods: {},
@@ -38,6 +39,11 @@ export default {
     index() {
       this.$nextTick(() => this.$refs.child.detail());
       this.$nextTick(() => this.$refs.child.play());
+      if(this.$refs.child.Liked.get(this.id)==null){
+        document.querySelector("#likeBtn").classList.remove("active");
+      }else{
+        document.querySelector("#likeBtn").classList.add("active");
+      }
     },
   },
 };

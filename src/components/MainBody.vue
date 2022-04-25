@@ -1,12 +1,12 @@
 <template>
   <div class="player">
-    <audio ref="mmAudio" :src="src" @timeupdate="current"></audio>
+    <audio ref="mmAudio" :src="src" @timeupdate="current" @ended="end"></audio>
     <div class="top">
       <img class="cover" :src="picUrl" />
       <div class="control">
         <div class="control-item">
           <span class="circle">
-            <i class="bi bi-heart-fill" ref="likeBtn" @click="like"></i>
+            <i class="bi bi-heart-fill" ref="likeBtn" id='likeBtn' @click="like"></i>
           </span>
         </div>
         <div class="control-item">
@@ -61,7 +61,7 @@ export default {
       Liked: new Map(),
     };
   },
-  props: ["id", "isLike"],
+  props: ["id", "isLike","loop"],
 
   methods: {
     second2time(s) {
@@ -112,6 +112,23 @@ export default {
       this.info = (await getDetail(this.id)).songs[0];
       console.log(this.info);
     },
+            end(){
+            if(this.loop==""){
+                this.currentTime=0
+                this.$refs.playBtn.className = "bi bi-pause-circle";
+            }else if(this.loop=="listloop"){
+                this.next()
+            }else if(this.loop =="loop"){
+                this.currentTime=0
+                this.$refs.mmAudio.play();
+            }else if(this.loop =="random"){
+                this.$parent.index = Math.floor((Math.random()*this.list.length));
+            }else{
+              this.$parent.list = Array.from(this.Liked).map(item => item[0]);
+              console.log(Array.from(this.Liked).map(item => item[0]))
+              this.$parent.index = 0
+            }
+        },
   },
 
   computed: {
