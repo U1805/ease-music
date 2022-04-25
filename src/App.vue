@@ -2,7 +2,9 @@
   <div class="background" id="player">
     <login-w :qr="qr"></login-w>
     <play-list :list="list"></play-list>
+    <Vue3DraggableResizable  :active="false" :lockAspectRatio="true"  :referenceLineVisible="false" :draggable="true" :resizable='false' style="border:none">
     <main-body :id="id" :index="index" ref="child" :loop="loop" :volume="volume"></main-body>
+    </Vue3DraggableResizable>
     <play-setting></play-setting>
   </div>
 </template>
