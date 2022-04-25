@@ -4,7 +4,7 @@ import 'nprogress/nprogress.css'
 
 const requests = axios.create({
     baseURL:'https://netease-cloud-music-api-khaki-chi.vercel.app/',
-    timeout: 5000
+    // timeout: 5000
 })
 
 

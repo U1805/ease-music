@@ -1,7 +1,7 @@
 <template>
   <div class="background" id="player">
     <login-w :qr='qr'></login-w>
-    <play-list></play-list>
+    <play-list :list="list"></play-list>
     <main-body :id="id"></main-body>
     <play-setting></play-setting>
   </div>
@@ -17,8 +17,7 @@ export default {
   data() {
     return {
       index: 0,
-      Mylist:[],
-      list: [1856722728, 2, 3],
+      list: [{id:1856722728}],
       qr:'',
     }
   },
@@ -31,7 +30,7 @@ export default {
   },
   computed: {
     id: function () {
-      return this.list[this.index]
+      return this.list[this.index]["id"]
     }
   }
 }

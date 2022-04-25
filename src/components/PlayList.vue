@@ -4,12 +4,9 @@
           <div class="card card-body " style="width: 300px;" >
             <div class="row pre-scrollable">
             <ol class="list-group">
-                <!-- <play-list
+                <li class="list-group-item" style="cursor: pointer;"
                     v-for="item in list"
-                    v-bind:list="item"
-                    :value="item.key"
-                    @click="changeSong"
-                ></play-list> -->
+                >{{ item.song }}</li>
             </ol>
         </div>
           </div>
@@ -17,11 +14,7 @@
     </div>
 </template>
 <script>
-// const playList = {
-//   props: ['list'],
-//   template: `<li class="list-group-item" style="cursor: pointer;">{{ list.song }} - {{ list.singer }}</li>`
-// }
 export default {
-
+    props:['list']
 }
 </script>

@@ -26,7 +26,7 @@
             </div>
             <div class="input-group  mb-3">
                 <span class="input-group-text" id="basic-addon1"
-                data-toggle="tooltip" data-placement="left" title="登录后单击可导入歌单" style="cursor: pointer;"  @click="getList">歌单</span>
+                data-toggle="tooltip" data-placement="left" title="登录后单击可导入歌单" style="cursor: pointer;"  @click="getMyList">歌单</span>
                 <input class="form-control" list="datalistOptions" id="exampleDataList" placeholder="6722704953">
                 <datalist id="datalistOptions">
                     <option
@@ -34,7 +34,7 @@
                         :value="item.listId"
                     >{{ item.listName }}</option>
                 </datalist>
-                <button type="button" class="btn btn-light">导入</button>
+                <button type="button" class="btn btn-light" @click="search">导入</button>
             </div>
             <button type="button" class="btn btn-light"
             data-bs-toggle="collapse" data-bs-target="#playlist" aria-expanded="false">播放列表</button>
@@ -44,13 +44,14 @@
 </template>
 
 <script>
-import {getLoginStatus,checkStatus,getUserList} from '@/api'
+import {getLoginStatus,checkStatus,getUserList,getList} from '@/api'
 import requests from '@/api/request.js'
+import { getDetail } from '../api'
 export default {
     data(){
         return{
             res: null,
-            Mylist: []
+            Mylist: [],
         }
     },
 
@@ -85,7 +86,7 @@ export default {
                 }
             }, 3000)
         },
-        async getList(){
+        async getMyList(){
             this.res = (await getUserList(localStorage.getItem("uid")))
             console.log(this.res)
             let Mylist = []
@@ -94,6 +95,20 @@ export default {
             })
             this.Mylist = Mylist
         },
+        async search(){
+            let list = []
+            let i = 0
+            let t = document.querySelector("#exampleDataList").value;
+            let query = (t=="") ? "6722704953":t
+            let res = (await getList(query))
+            console.log(res)
+            res.playlist.trackIds.map(async function(item){
+                let r = (await getDetail(item.id)).songs[0]
+                list.push({index:i++,song:r.name,singer:r.ar[0].name,id:r.id})
+                console.log(r)
+            })
+            this.$parent.list = list
+        }
     },
 }
 </script>
