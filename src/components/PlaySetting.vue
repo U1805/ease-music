@@ -9,8 +9,8 @@
         </div>
         <div class="input-group mb-3">
           <span class="input-group-text" id="basic-addon1">背景</span>
-          
-          <input type="text" class="form-control" placeholder="Url" aria-label="0-100" aria-describedby="basic-addon1" v-model="background"/>
+
+          <input type="text" class="form-control" placeholder="Url" aria-label="0-100" aria-describedby="basic-addon1" v-model="background" />
         </div>
         <div class="input-group mb-3">
           <span class="input-group-text" id="basic-addon1">音量</span>
@@ -36,13 +36,13 @@
             @click="getMyList"
             >歌单</span
           >
-          <input class="form-control" list="datalistOptions" id="exampleDataList" placeholder="搜索歌曲##数量" />
+          <input class="form-control" list="datalistOptions" id="exampleDataList" placeholder="搜索歌曲##数量" ref="searchBar" />
           <datalist id="datalistOptions">
             <option v-for="item in Mylist" :value="item.listId">
               {{ item.listName }}
             </option>
           </datalist>
-          <button type="button" class="btn btn-light" @click="search">Go!</button>
+          <button type="button" class="btn btn-light" @click="search" ref="searchBtn">Go!</button>
         </div>
         <button type="button" class="btn btn-light" data-bs-toggle="collapse" data-bs-target="#playlist" aria-expanded="false">播放列表</button>
       </div>
@@ -51,7 +51,7 @@
 </template>
 
 <script>
-import { getLoginStatus, checkStatus, getUserList, getList,search} from "@/api";
+import { getLoginStatus, checkStatus, getUserList, getList, search } from "@/api";
 import requests from "@/api/request.js";
 import { getDetail } from "../api";
 export default {
@@ -59,7 +59,7 @@ export default {
     return {
       res: null,
       Mylist: [],
-      background:''
+      background: "",
     };
   },
 
@@ -77,7 +77,6 @@ export default {
         withCredentials: true, //关键
       });
       this.$parent.qr = res2.data.qrimg;
-
       timer = setInterval(async () => {
         const statusRes = await checkStatus(key);
         if (statusRes.code === 800) {
@@ -96,7 +95,6 @@ export default {
     },
     async getMyList() {
       this.res = await getUserList(localStorage.getItem("uid"));
-      // console.log(this.res)
       let Mylist = [];
       this.res.playlist.map((item) => {
         Mylist.push({ listId: item.id, listName: item.name });
@@ -104,24 +102,31 @@ export default {
       this.Mylist = Mylist;
     },
     async search() {
-      var that = this, res = null, i = 0;
-
+      var that = this,res = null,i = 0;
+      this.$refs.searchBar.disabled = true;
+      this.$refs.searchBtn.disabled = true;
+      this.$refs.searchBtn.innerHTML = `<div class="spinner-border spinner-border-sm" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>`;
       let t = document.querySelector("#exampleDataList").value;
-      let query = (t == "" )? "6722704953" : t;
+      let query = t == "" ? "6722704953" : t;
       var pattern = /^[0-9]*$/;
-      res = pattern.test(query)? (await getList(query)).playlist.trackIds: (await search(query.split('##')[0],query.split('##')[1])).result.songs
-            that.$parent.list=[]
+      res = pattern.test(query) ? (await getList(query)).playlist.trackIds : (await search(query.split("##")[0], query.split("##")[1])).result.songs;
+      that.$parent.list = [];
       res.map(async function (item) {
         let r = (await getDetail(item.id)).songs[0];
         that.$parent.list.push({ index: i++, song: r.name, singer: r.ar[0].name, id: item.id });
       });
+      this.$refs.searchBar.disabled = false;
+      this.$refs.searchBtn.disabled = false;
+      this.$refs.searchBtn.innerHTML = "Go!";
     },
   },
 
-  watch:{
-    background(){
-        document.querySelector("body").style.backgroundImage = `url(${this.background})`;
-    }
-  }
+  watch: {
+    background() {
+      document.querySelector("body").style.backgroundImage = `url(${this.background})`;
+    },
+  },
 };
 </script>
