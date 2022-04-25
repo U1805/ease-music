@@ -2,7 +2,7 @@
   <div class="background" id="player">
     <login-w :qr="qr"></login-w>
     <play-list :list="list"></play-list>
-    <main-body :id="id" :index="index" ref="child" :loop="loop"></main-body>
+    <main-body :id="id" :index="index" ref="child" :loop="loop" :volume='volume'></main-body>
     <play-setting></play-setting>
   </div>
 </template>
@@ -19,7 +19,8 @@ export default {
       index: 0,
       list: [{ index:9,song:"好きだから。",singer:"『ユイカ』",id: 1856722728 }],
       qr: "",
-      loop:''
+      loop:'',
+      volume:40,
     };
   },
   methods: {},
@@ -28,6 +29,7 @@ export default {
     PlaySetting,
     PlayList,
     LoginW,
+    
   },
   computed: {
     id: function () {

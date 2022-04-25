@@ -15,7 +15,8 @@
         </div>
         <div class="input-group mb-3">
           <span class="input-group-text" id="basic-addon1">音量</span>
-          <input type="text" class="form-control" placeholder="0-100" aria-label="0-1" aria-describedby="basic-addon1" />
+          <input type="text" class="form-control" placeholder="0-100" aria-label="0-1" aria-describedby="basic-addon1" v-model="volume" id="volume" />
+          <input type="range" class="form-range" id="v-range" min="0" max="100" :value="volume" @mousemove="changeVolume" />
         </div>
         <div class="input-group mb-3">
           <span class="input-group-text" id="basic-addon1">播放</span>
@@ -23,7 +24,6 @@
             <option value="loop">单曲循环</option>
             <option value="listloop">列表循环</option>
             <option value="random">随机播放</option>
-            <option value="like">播放收藏</option>
           </select>
         </div>
         <div class="input-group mb-3">
@@ -63,6 +63,7 @@ export default {
       Mylist: [],
       background: "",
       loop: "",
+      volume: 40,
     };
   },
 
@@ -130,15 +131,22 @@ export default {
     File() {
       const file = document.querySelector("#upload-btn").files[0];
       const reader = new FileReader();
-      var that = this
+      var that = this;
 
-      reader.addEventListener("load",function () {
+      reader.addEventListener(
+        "load",
+        function () {
           // 将图像文件转换为 base64 字符串
-        that.background = reader.result
-        },false);
+          that.background = reader.result;
+        },
+        false
+      );
       if (file) {
         reader.readAsDataURL(file);
       }
+    },
+    changeVolume() {
+      this.volume = document.querySelector("#v-range").value
     },
   },
 
@@ -148,6 +156,9 @@ export default {
     },
     loop() {
       this.$parent.loop = this.loop;
+    },
+    volume() {
+      this.$parent.volume = this.volume;
     },
   },
 };

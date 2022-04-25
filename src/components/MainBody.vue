@@ -1,6 +1,6 @@
 <template>
   <div class="player">
-    <audio ref="mmAudio" :src="src" @timeupdate="current" @ended="end"></audio>
+    <audio ref="mmAudio" :src="src" @timeupdate="current" @ended="end" :volume="volume/100"></audio>
     <div class="top">
       <img class="cover" :src="picUrl" />
       <div class="control">
@@ -43,7 +43,7 @@
       <div class="singer">{{ singer }}</div>
       <div class="progress">
         <div class="time">{{ second2time(currentTime) }}-{{ second2time(totalTime) }}</div>
-        <input type="range" class="form-range" id="customRange1" :value="currentTime" min="0" :max="totalTime" @mouseup="changeTime" />
+        <input type="range" class="form-range" id="customRange1" :value="currentTime" min="0" :max="totalTime" @mousemove="changeTime" />
       </div>
     </div>
   </div>
@@ -61,7 +61,7 @@ export default {
       Liked: new Map(),
     };
   },
-  props: ["id", "isLike","loop"],
+  props: ["id", "isLike","loop","volume"],
 
   methods: {
     second2time(s) {

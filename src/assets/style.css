@@ -2,6 +2,7 @@ body{
     background-color: #dfe7ef;
     font-family: "Bitter", serif;
     background-attachment:fixed;
+    background-size: cover;
     margin: 0;
     padding: 0;
 }
@@ -17,6 +18,7 @@ body{
     display: flex;
     align-items: center;
     justify-content: space-between;
+
 }
 
 .bi {
@@ -176,7 +178,25 @@ to {
 }
 
 input[type="range"]::-webkit-slider-thumb{
+    margin: -3px -2px;
     -webkit-appearance: none;
     background:#a9b6c4;
     transition:.2s;
+    width: 10px;
+    height: 10px;
 }
+
+
+input[id="v-range"]::-webkit-slider-thumb{
+    -webkit-appearance: none;
+    background: url("./volume-down.svg");
+    background-position-y: -2px;
+    width: 18px;
+    height: 18px;
+    margin: -6px;
+    background-size: 20px;
+}
+
+input[type="range"]::-webkit-slider-runnable-track {
+    height: 3px;
+  }
