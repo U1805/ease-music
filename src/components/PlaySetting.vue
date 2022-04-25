@@ -36,13 +36,13 @@
             @click="getMyList"
             >歌单</span
           >
-          <input class="form-control" list="datalistOptions" id="exampleDataList" placeholder="6722704953" />
+          <input class="form-control" list="datalistOptions" id="exampleDataList" placeholder="搜索歌曲##数量" />
           <datalist id="datalistOptions">
             <option v-for="item in Mylist" :value="item.listId">
               {{ item.listName }}
             </option>
           </datalist>
-          <button type="button" class="btn btn-light" @click="search">导入</button>
+          <button type="button" class="btn btn-light" @click="search">Go!</button>
         </div>
         <button type="button" class="btn btn-light" data-bs-toggle="collapse" data-bs-target="#playlist" aria-expanded="false">播放列表</button>
       </div>
@@ -105,10 +105,12 @@ export default {
     },
     async search() {
       var that = this, res = null, i = 0;
+
       let t = document.querySelector("#exampleDataList").value;
       let query = (t == "" )? "6722704953" : t;
       var pattern = /^[0-9]*$/;
-      res = pattern.test(query)? (await getList(query)).playlist.trackIds: (await search(query)).result.songs
+      res = pattern.test(query)? (await getList(query)).playlist.trackIds: (await search(query.split('##')[0],query.split('##')[1])).result.songs
+            that.$parent.list=[]
       res.map(async function (item) {
         let r = (await getDetail(item.id)).songs[0];
         that.$parent.list.push({ index: i++, song: r.name, singer: r.ar[0].name, id: item.id });

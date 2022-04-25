@@ -5,7 +5,7 @@
         <div class="row pre-scrollable">
           <ol class="list-group">
             <li class="list-group-item" style="cursor: pointer" v-for="item in list" :value="item.index" @click="changeSong">
-              {{ item.song }}
+              {{ item.song }}-{{ item.singer }}
             </li>
           </ol>
         </div>

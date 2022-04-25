@@ -16,8 +16,10 @@ export const getAudio = (id)=>{
     return `https://music.163.com/song/media/outer/url?id=${ id }.mp3`
 }
 
-export const search = (key)=>{
-    return requests({url:`/search?keywords=${ key }`,method:"get"})
+export const search = (key, num=30)=>{
+    var pattern = /^[0-9]*$/;
+    num = pattern.test(num)?num:30
+    return requests({url:`/search?keywords=${ key }&limit=${ num }`,method:"get"})
 }
 
 //登录函数
