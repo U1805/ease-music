@@ -6,6 +6,8 @@
             <ol class="list-group">
                 <li class="list-group-item" style="cursor: pointer;"
                     v-for="item in list"
+                    :value="item.index"
+                    @click="changeSong"
                 >{{ item.song }}</li>
             </ol>
         </div>
@@ -15,6 +17,12 @@
 </template>
 <script>
 export default {
-    props:['list']
+    props:['list'],
+    methods:{
+        changeSong(event){
+            console.log(event.target.value)
+            this.$parent.index = event.target.value;
+        }
+    }
 }
 </script>

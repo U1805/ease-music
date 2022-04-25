@@ -30,7 +30,7 @@
         </div>
         <div class="control-item">
           <span class="circle">
-            <i class="bi bi-skip-end-fill" style="font-size: 40px"></i>
+            <i class="bi bi-skip-end-fill" style="font-size: 40px" @click="next"></i>
           </span>
         </div>
         <div class="control-play">
@@ -82,15 +82,18 @@ export default {
         }
       });
     },
-    // prev(){
-    //     this.index --;
-    //     if(this.index<0) this.index = this.list.length-1;
-    //     console.log(this.index)
-    //     this.$parent.index = this.index
-    //     // this.$nextTick(() => this.playMusic())
-    // },
+    prev(){
+        this.index --;
+        if(this.index<0) this.index = this.$parent.list.length-1;
+        this.$parent.index = this.index
+    },
+    next(){
+        this.index = (this.index+1)%this.$parent.list.length;
+        console.log(this.index)
+        this.$parent.index = this.index
+    },
     like() {
-      var idd = this.id;
+      let idd = this.id;
       if (this.Liked.get(idd) == null) {
         this.Liked.set(idd, true);
         this.$refs.likeBtn.classList.add("active");

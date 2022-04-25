@@ -2,7 +2,7 @@
   <div class="background" id="player">
     <login-w :qr='qr'></login-w>
     <play-list :list="list"></play-list>
-    <main-body :id="id"></main-body>
+    <main-body :id="id" :index='index' ref='child'></main-body>
     <play-setting></play-setting>
   </div>
 </template>
@@ -31,6 +31,12 @@ export default {
   computed: {
     id: function () {
       return this.list[this.index]["id"]
+    }
+  },
+  watch:{
+    index(){
+      this.$nextTick(() => this.$refs.child.detail())
+      this.$nextTick(() => this.$refs.child.play())
     }
   }
 }
