@@ -3,6 +3,7 @@ import nprogress from "nprogress";
 import 'nprogress/nprogress.css'
 
 const requests = axios.create({
+    baseURL:'https://netease-cloud-music-api-khaki-chi.vercel.app/',
     timeout: 5000
 })
 
@@ -16,7 +17,7 @@ requests.interceptors.request.use((config)=>{
 //响应拦截器
 requests.interceptors.response.use((res)=>{
     nprogress.done()
-    console.log(res.data)
+    // console.log(res.data)
     return res.data
 },(error)=>{
     console.log(error)
