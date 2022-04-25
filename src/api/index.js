@@ -16,6 +16,10 @@ export const getAudio = (id)=>{
     return `https://music.163.com/song/media/outer/url?id=${ id }.mp3`
 }
 
+export const search = (key)=>{
+    return requests({url:`/search?keywords=${ key }`,method:"get"})
+}
+
 //登录函数
 export const checkStatus = async function(key) {
     const res = await requests({

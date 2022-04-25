@@ -82,15 +82,14 @@ export default {
         }
       });
     },
-    prev(){
-        this.index --;
-        if(this.index<0) this.index = this.$parent.list.length-1;
-        this.$parent.index = this.index
+    prev() {
+      this.index--;
+      if (this.index < 0) this.index = this.$parent.list.length - 1;
+      this.$parent.index = this.index;
     },
-    next(){
-        this.index = (this.index+1)%this.$parent.list.length;
-        console.log(this.index)
-        this.$parent.index = this.index
+    next() {
+      this.index = (this.index + 1) % this.$parent.list.length;
+      this.$parent.index = this.index;
     },
     like() {
       let idd = this.id;

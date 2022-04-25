@@ -20,7 +20,7 @@ requests.interceptors.response.use((res)=>{
     // console.log(res.data)
     return res.data
 },(error)=>{
-    console.log(error)
+    // console.log(error)
 })
 
 export default requests
