@@ -9,8 +9,9 @@
         </div>
         <div class="input-group mb-3">
           <span class="input-group-text" id="basic-addon1">背景</span>
-
           <input type="text" class="form-control" placeholder="Url" aria-label="0-100" aria-describedby="basic-addon1" v-model="background" />
+          <button class="btn btn-light bi bi-camera" type="button" id="upload-img" onclick="document.querySelector('#upload-btn').click()"></button>
+          <input type="file" id="upload-btn" @change="File" />
         </div>
         <div class="input-group mb-3">
           <span class="input-group-text" id="basic-addon1">音量</span>
@@ -54,13 +55,14 @@
 import { getLoginStatus, checkStatus, getUserList, getList, search } from "@/api";
 import requests from "@/api/request.js";
 import { getDetail } from "../api";
+
 export default {
   data() {
     return {
       res: null,
       Mylist: [],
       background: "",
-      loop:''
+      loop: "",
     };
   },
 
@@ -103,7 +105,9 @@ export default {
       this.Mylist = Mylist;
     },
     async search() {
-      var that = this,res = null,i = 0;
+      var that = this,
+        res = null,
+        i = 0;
       this.$refs.searchBar.disabled = true;
       this.$refs.searchBtn.disabled = true;
       this.$refs.searchBtn.innerHTML = `<div class="spinner-border spinner-border-sm" role="status">
@@ -121,16 +125,39 @@ export default {
       this.$refs.searchBar.disabled = false;
       this.$refs.searchBtn.disabled = false;
       this.$refs.searchBtn.innerHTML = "Go!";
-    }
+    },
+
+    File() {
+      const file = document.querySelector("#upload-btn").files[0];
+      const reader = new FileReader();
+      var that = this
+
+      reader.addEventListener("load",function () {
+          // 将图像文件转换为 base64 字符串
+        that.background = reader.result
+        },false);
+      if (file) {
+        reader.readAsDataURL(file);
+      }
+    },
   },
 
   watch: {
     background() {
       document.querySelector("body").style.backgroundImage = `url(${this.background})`;
     },
-    loop(){
-        this.$parent.loop = this.loop
-    }
+    loop() {
+      this.$parent.loop = this.loop;
+    },
   },
 };
 </script>
+
+<style scoped>
+#upload-img {
+  font-size: 15px;
+}
+#upload-btn {
+  display: none;
+}
+</style>
