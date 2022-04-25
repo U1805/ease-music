@@ -146,7 +146,7 @@ export default {
       }
     },
     changeVolume() {
-      this.volume = document.querySelector("#v-range").value
+      this.volume = document.querySelector("#v-range").value;
     },
   },
 

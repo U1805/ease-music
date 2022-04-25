@@ -2,7 +2,7 @@
   <div class="background" id="player">
     <login-w :qr="qr"></login-w>
     <play-list :list="list"></play-list>
-    <main-body :id="id" :index="index" ref="child" :loop="loop" :volume='volume'></main-body>
+    <main-body :id="id" :index="index" ref="child" :loop="loop" :volume="volume"></main-body>
     <play-setting></play-setting>
   </div>
 </template>
@@ -17,10 +17,10 @@ export default {
   data() {
     return {
       index: 0,
-      list: [{ index:9,song:"好きだから。",singer:"『ユイカ』",id: 1856722728 }],
+      list: [{ index: 9, song: "好きだから。", singer: "『ユイカ』", id: 1856722728 }],
       qr: "",
-      loop:'',
-      volume:40,
+      loop: "",
+      volume: 40,
     };
   },
   methods: {},
@@ -29,7 +29,6 @@ export default {
     PlaySetting,
     PlayList,
     LoginW,
-    
   },
   computed: {
     id: function () {
@@ -41,9 +40,9 @@ export default {
     index() {
       this.$nextTick(() => this.$refs.child.detail());
       this.$nextTick(() => this.$refs.child.play());
-      if(this.$refs.child.Liked.get(this.id)==null){
+      if (this.$refs.child.Liked.get(this.id) == null) {
         document.querySelector("#likeBtn").classList.remove("active");
-      }else{
+      } else {
         document.querySelector("#likeBtn").classList.add("active");
       }
     },

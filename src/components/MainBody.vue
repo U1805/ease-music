@@ -1,12 +1,12 @@
 <template>
   <div class="player">
-    <audio ref="mmAudio" :src="src" @timeupdate="current" @ended="end" :volume="volume/100"></audio>
+    <audio ref="mmAudio" :src="src" @timeupdate="current" @ended="end" :volume="volume / 100"></audio>
     <div class="top">
       <img class="cover" :src="picUrl" />
       <div class="control">
         <div class="control-item">
           <span class="circle">
-            <i class="bi bi-heart-fill" ref="likeBtn" id='likeBtn' @click="like" @contextmenu="playLike"></i>
+            <i class="bi bi-heart-fill" ref="likeBtn" id="likeBtn" @click="like" @contextmenu="playLike"></i>
           </span>
         </div>
         <div class="control-item">
@@ -61,7 +61,7 @@ export default {
       Liked: new Map(),
     };
   },
-  props: ["id", "isLike","loop","volume"],
+  props: ["id", "isLike", "loop", "volume"],
 
   methods: {
     second2time(s) {
@@ -112,33 +112,34 @@ export default {
       this.info = (await getDetail(this.id)).songs[0];
       console.log(this.info);
     },
-            end(){
-              // alert("The video has ended");
-            if(this.loop==""){
-                this.currentTime=0
-                this.$refs.playBtn.className = "bi bi-pause-circle";
-            }else if(this.loop=="listloop"){
-                this.next()
-            }else if(this.loop =="loop"){
-                this.currentTime=0
-                this.$refs.mmAudio.play();
-            }else{
-                this.$parent.index = Math.floor((Math.random()*this.$parent.list.length));
-            }
-        },
-        playLike(){
-          // alert(123)
-              var that = this,i = 0
-              that.$parent.list = []
-              let arr = Array.from(this.Liked).map(item => item[0])
-              // console.log(arr)
-              arr.map(async function(item){
-                let r = (await getDetail(item)).songs[0];
-                // console.log(that.$parent.list)
-                that.$parent.list.push({ index: i++, song: r.name, singer: r.ar[0].name, id: item });
-              })
-              // this.$parent.index = 0
-        }
+    end() {
+      // alert("The video has ended");
+      if (this.loop == "") {
+        this.currentTime = 0;
+        this.$refs.playBtn.className = "bi bi-pause-circle";
+      } else if (this.loop == "listloop") {
+        this.next();
+      } else if (this.loop == "loop") {
+        this.currentTime = 0;
+        this.$refs.mmAudio.play();
+      } else {
+        this.$parent.index = Math.floor(Math.random() * this.$parent.list.length);
+      }
+    },
+    playLike() {
+      // alert(123)
+      var that = this,
+        i = 0;
+      that.$parent.list = [];
+      let arr = Array.from(this.Liked).map((item) => item[0]);
+      // console.log(arr)
+      arr.map(async function (item) {
+        let r = (await getDetail(item)).songs[0];
+        // console.log(that.$parent.list)
+        that.$parent.list.push({ index: i++, song: r.name, singer: r.ar[0].name, id: item });
+      });
+      // this.$parent.index = 0
+    },
   },
 
   computed: {
