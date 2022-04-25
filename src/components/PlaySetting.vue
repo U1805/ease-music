@@ -121,7 +121,7 @@ export default {
       this.$refs.searchBar.disabled = false;
       this.$refs.searchBtn.disabled = false;
       this.$refs.searchBtn.innerHTML = "Go!";
-    },
+    }
   },
 
   watch: {

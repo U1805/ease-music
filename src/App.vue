@@ -31,7 +31,7 @@ export default {
   },
   computed: {
     id: function () {
-      console.log(this.list)
+      // console.log(this.list)
       return this.list[this.index]["id"];
     },
   },
