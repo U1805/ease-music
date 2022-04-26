@@ -64,6 +64,7 @@ export default {
       background: "",
       loop: "",
       volume: 40,
+      time:null
     };
   },
 
@@ -80,7 +81,7 @@ export default {
         withCredentials: true, //关键
       });
       this.$parent.qr = res2.data.qrimg;
-      var timer = setInterval(async () => {
+      this.timer = setInterval(async () => {
         const statusRes = await checkStatus(key);
         if (statusRes.code === 800) {
           alert("二维码已过期,请重新获取");
@@ -95,6 +96,9 @@ export default {
           window.location.reload();
         }
       }, 3000);
+    },
+    clearT(){
+      clearTimeout(this.timer)
     },
     async getMyList() {
       this.res = await getUserList(localStorage.getItem("uid"));
