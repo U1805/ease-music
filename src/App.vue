@@ -2,7 +2,7 @@
   <div class="background" id="player">
     <login-w :qr="qr"></login-w>
     <play-list :list="list"></play-list>
-    <Vue3DraggableResizable :draggable="true" :resizable="false" style="border: none">
+    <Vue3DraggableResizable :draggable="true" :resizable="false" style="border:none;" :x="500" :y="250">
       <main-body :id="id" :index="index" ref="child" :loop="loop" :volume="volume" :list="list" @changeIndex="changeMsgFn"></main-body>
     </Vue3DraggableResizable>
     <play-setting></play-setting>

@@ -10,7 +10,7 @@
             <img id="qrImg" class="rounded mx-auto d-block" :src='qr'/>
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">close</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="fun">close</button>
         </div>
         </div>
     </div>
@@ -21,9 +21,9 @@
 export default {
     props:['qr'],
     methods:{
-        clearTimer(){
-            
-        }
+    // clearTimer(){
+    //   clearTimeout(timer)
+    // },
     }
 }
 </script>
