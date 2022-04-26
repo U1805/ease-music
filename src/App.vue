@@ -33,7 +33,9 @@ export default {
   computed: {
     id: function () {
       // console.log(this.list)
+      if(this.list[0]){
       return this.list[this.index]["id"];
+      }
     },
   },
   watch: {
