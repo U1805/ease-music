@@ -15,6 +15,8 @@ PC 端为主，没有适配移动端；也没有考虑浏览器兼容
 > vue3-draggable-resizable
 >
 > nprogress
+>
+> vuex
 
 [演示地址](https://ease-music.vercel.app/)
 
@@ -61,5 +63,5 @@ PC 端为主，没有适配移动端；也没有考虑浏览器兼容
 - [x] 播放收藏歌曲
 - [x] 搜索歌曲
 - [ ] 收藏歌曲本地保存
-- [ ] Error
+- [x] Error
 

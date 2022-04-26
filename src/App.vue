@@ -4,7 +4,7 @@
     <login-w :qr="qr" @clearTimer="clear"></login-w>
     <play-list :list="list"></play-list>
     <Vue3DraggableResizable :draggable="true" :resizable="false" style="border: none" :x="500" :y="250">
-      <main-body :id="id" :index="index" ref="child" :loop="loop" :volume="volume" :list="list" @changeIndex="changeMsgFn"></main-body>
+      <main-body ref="child" :loop="loop" :likelist="Liked" @playLikes='likelistt'></main-body>
     </Vue3DraggableResizable>
     <play-setting ref="timer"></play-setting>
   </div>
@@ -16,50 +16,51 @@ import PlaySetting from "./components/PlaySetting.vue";
 import PlayList from "./components/PlayList.vue";
 import LoginW from "./components/LoginW.vue";
 import ErrorWindow from "./components/ErrorWindow.vue";
+import { getDetail } from "@/api";
+
 export default {
   name: "App",
-  data() {
-    return {
-      index: 0,
-      list: [{ index: 9, song: "好きだから。", singer: "『ユイカ』", id: 1856722728 }],
-      qr: "",
-      loop: "",
-      volume: 40,
-    };
-  },
-  methods: {
-    changeMsgFn(value) {
-      this.index = value;
-    },
-    clear() {
-      this.$refs.timer.clearT();
-    },
-  },
-  components: {
+    components: {
     MainBody,
     PlaySetting,
     PlayList,
     LoginW,
     ErrorWindow,
   },
-  computed: {
-    id: function () {
-      if (this.list[0]) {
-        return this.list[this.index]["id"];
-      }
-    },
+  data() {
+    return {
+      index: 0,
+      list: [],//song, singer, id, picurl
+      Liked: [],
+      qr: "",
+      loop: "",
+    };
   },
+  methods: {
+    clear() {
+      this.$refs.timer.clearT();
+    },
+    likelistt(){
+      // console.log(this.Liked)
+      document.querySelector('#play_button').className = "bi bi-play-circle"
+      document.querySelector('#mmAudio').pause()
+      var that = this
+      this.list = []
+      this.Liked.map(async function (item,index) {
+        let r = (await getDetail(item)).songs[0];
+        that.list.push({ song: r.name, singer: r.ar[0].name, id: item,picUrl:r.al.picUrl });
+        if(index==0) that.$store.commit('showInfo',{ song: r.name, singer: r.ar[0].name, id: item, picUrl:r.al.picUrl })
+      });
+      // that.index = 0
+    }
+
+  },
+
+  
   watch: {
     index() {
-      if (this.list[0]) {
-        this.$nextTick(() => this.$refs.child.detail());
-        this.$nextTick(() => this.$refs.child.play());
-        if (this.$refs.child.Liked.get(this.id) == null) {
-          document.querySelector("#likeBtn").classList.remove("active");
-        } else {
-          document.querySelector("#likeBtn").classList.add("active");
-        }
-      }
+      this.$store.commit('showInfo',this.list[this.index])
+      this.$refs.child.play()
     },
   },
 };

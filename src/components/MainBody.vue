@@ -1,8 +1,8 @@
 <template>
   <div class="player">
-    <audio ref="mmAudio" :src="src" @timeupdate="current" @ended="end" :volume="volume / 100" @error="error"></audio>
+    <audio id='mmAudio' ref="mmAudio" :src="src" @timeupdate="current" @ended="end" @error="error"></audio>
     <div class="top">
-      <img class="cover" :src="picUrl" />
+      <img class="cover" :src="info.picUrl" />
       <div class="control">
         <div class="control-item">
           <span class="circle">
@@ -11,16 +11,7 @@
         </div>
         <div class="control-item">
           <span class="circle">
-            <i
-              class="bi bi-music-note-list"
-              data-toggle="tooltip"
-              data-placement="right"
-              title="歌单"
-              data-bs-toggle="collapse"
-              data-bs-target="#setting"
-              aria-expanded="false"
-              aria-controls="setting"
-            ></i>
+            <i class="bi bi-music-note-list" data-bs-toggle="collapse" data-bs-target="#setting" aria-expanded="false" aria-controls="setting"></i>
           </span>
         </div>
         <div class="control-item">
@@ -33,14 +24,12 @@
             <i class="bi bi-skip-end-fill" style="font-size: 40px" @click="next"></i>
           </span>
         </div>
-        <div class="control-play">
-          <i id="play_button" class="bi bi-play-circle" @click="play" ref="playBtn"></i>
-        </div>
+        <div class="control-play"><i id="play_button" class="bi bi-play-circle" @click="play" ref="playBtn"></i></div>
       </div>
     </div>
     <div class="bottom">
-      <div class="title">{{ song }}</div>
-      <div class="singer">{{ singer }}</div>
+      <div class="title">{{ info.song }}</div>
+      <div class="singer">{{ info.singer }}</div>
       <div class="progress">
         <div class="time">{{ second2time(currentTime) }}-{{ second2time(totalTime) }}</div>
         <input type="range" class="form-range" id="customRange1" :value="currentTime" min="0" :max="totalTime" @mousemove="changeTime" />
@@ -50,55 +39,53 @@
 </template>
 
 <script>
-import { getDetail, getAudio } from "@/api";
+import { getAudio } from "@/api";
 export default {
   data() {
     return {
-      index: 0,
-      info: null,
       currentTime: 0,
       totalTime: 0,
-      Liked: new Map(),
     };
   },
-  props: ["id", "isLike", "loop", "volume", "list"],
+  props: ["likelist",'loop'],
+  computed: {      
+    info:function(){
+        return this.$store.state.info
+      },
+      src: function () {
+        return getAudio(this.info.id);
+      },
+      isLiked: function(){
+        if(this.likelist == undefined) return false
+        return this.likelist.indexOf(this.info.id)!=-1
+      },
 
-  methods: {
-    second2time(s) {
-      let m = parseInt(s / 60);
-      let mm = m < 10 ? "0" + m : m;
-      let ss = parseInt(s % 60);
-      let sss = ss < 10 ? "0" + ss : ss;
-      return mm + ":" + sss;
     },
+  methods: {
+    second2time(time) {
+      let m = parseInt(time / 60);
+      let mm = m < 10 ? "0" + m : m;
+      let s = parseInt(time % 60);
+      let ss = s < 10 ? "0" + s : s;
+      return mm + ":" + ss;
+    },
+
     play() {
-      this.$nextTick(function () {
-        if (this.$refs.mmAudio.paused) {
-          this.$refs.mmAudio.play();
-          this.$refs.playBtn.className = "bi bi-pause-circle";
-        } else {
-          this.$refs.mmAudio.pause();
-          this.$refs.playBtn.className = "bi bi-play-circle";
-        }
-      });
+      this.$nextTick(() => (this.$refs.mmAudio.paused ? this.$refs.mmAudio.play() : this.$refs.mmAudio.pause()));
+      this.$nextTick(()=>(this.$refs.playBtn.className = this.$refs.mmAudio.paused  ? "bi bi-play-circle":"bi bi-pause-circle"))
     },
     prev() {
-      this.index--;
-      if (this.index < 0) this.index = this.list.length - 1;
-      this.$emit("changeIndex", this.index);
+      this.$parent.$parent.index--;
+      if (this.$parent.$parent.index < 0) this.index = this.$parent.$parent.list.length - 1;
     },
     next() {
-      this.index = (this.index + 1) % this.list.length;
-      this.$emit("changeIndex", this.index);
+      this.$parent.$parent.index = (this.$parent.$parent.index + 1) % this.$parent.$parent.list.length;
     },
     like() {
-      let idd = this.id;
-      if (this.Liked.get(idd) == null) {
-        this.Liked.set(idd, true);
-        this.$refs.likeBtn.classList.add("active");
-      } else if (this.Liked.get(idd)) {
-        this.Liked.delete(idd);
-        this.$refs.likeBtn.classList.remove("active");
+      if(this.isLiked){
+        this.$parent.$parent.Liked.splice(this.$parent.$parent.Liked.indexOf(this.info.id), 1)
+      }else{
+        this.$parent.$parent.Liked.push(this.info.id)
       }
     },
     current() {
@@ -108,35 +95,20 @@ export default {
     changeTime() {
       this.$refs.mmAudio.currentTime = document.querySelector("#customRange1").value;
     },
-    async detail() {
-      this.info = (await getDetail(this.id)).songs[0];
-      console.log(this.info);
-    },
     end() {
-      if (this.loop == "") {
-        this.currentTime = 0;
-        this.$refs.playBtn.className = "bi bi-pause-circle";
-      } else if (this.loop == "listloop") {
-        this.next();
-      } else if (this.loop == "loop") {
-        this.currentTime = 0;
-        this.$refs.mmAudio.play();
-      } else {
-        this.index = Math.floor(Math.random() * this.list.length);
-        this.$emit("changeIndex", this.index);
+      switch (this.loop) {
+        case "":
+          this.currentTime = 0;break;
+        case "listloop":
+          this.next();break;
+        case "loop":
+          this.currentTime = 0;
+          this.$refs.mmAudio.play();break;
+        case "random":
+          this.$parent.$parent.index = Math.floor(Math.random() * this.$parent.$parent.list.length);break;
+        default:
+          console.log("loop error");
       }
-    },
-    playLike() {
-      var that = this,
-        i = 0;
-      that.$parent.$parent.list = [];
-      let arr = Array.from(this.Liked).map((item) => item[0]);
-      arr.map(async function (item) {
-        let r = (await getDetail(item)).songs[0];
-        that.$parent.$parent.list.push({ index: i++, song: r.name, singer: r.ar[0].name, id: item });
-        console.log(that.$parent.$parent.list);
-      });
-      this.$emit("changeIndex", 0);
     },
     error() {
       var toastLiveExample = document.getElementById("liveToast");
@@ -144,27 +116,14 @@ export default {
       toast.show();
       setTimeout(this.next(), 3000);
     },
+    playLike(){
+      if(this.isLiked) this.$emit('playLikes')
+    }
   },
-
-  computed: {
-    src: function () {
-      return getAudio(this.id);
+  watch: {
+    isLiked() {
+      this.$nextTick(() => (this.isLiked ? this.$refs.likeBtn.classList.add("active") : this.$refs.likeBtn.classList.remove("active")));
     },
-    song: function () {
-      if (this.info != null) return this.info.name;
-      else return "";
-    },
-    singer: function () {
-      if (this.info != null) return this.info.ar[0].name;
-      else return "";
-    },
-    picUrl: function () {
-      if (this.info != null) return this.info.al.picUrl;
-      else return "https://www.xuanzhuji.com/wp-content/uploads/2022/02/781ee360b9bf7af07f7342b9a0e188c4.png";
-    },
-  },
-  mounted() {
-    this.detail();
   },
 };
 </script>

@@ -52,9 +52,8 @@
 </template>
 
 <script>
-import { getLoginStatus, checkStatus, getUserList, getList, search } from "@/api";
+import { getLoginStatus, checkStatus, getUserList, getList, search,getDetail } from "@/api";
 import requests from "@/api/request.js";
-import { getDetail } from "../api";
 
 export default {
   data() {
@@ -109,41 +108,37 @@ export default {
       this.Mylist = Mylist;
     },
     async search() {
+      document.querySelector('#play_button').className = "bi bi-play-circle"
+      document.querySelector('#mmAudio').pause()
       var that = this,
-        res = null,
-        i = 0;
+        res = null
       this.$refs.searchBar.disabled = true;
       this.$refs.searchBtn.disabled = true;
-      this.$refs.searchBtn.innerHTML = `<div class="spinner-border spinner-border-sm" role="status">
-            <span class="visually-hidden">Loading...</span>
-          </div>`;
+      this.$refs.searchBtn.innerHTML = `<div class="spinner-border spinner-border-sm" role="status"><span class="visually-hidden">Loading...</span></div>`;
       let t = document.querySelector("#exampleDataList").value;
-      let query = t == "" ? "6722704953" : t;
+      let query = (t == "") ? "6722704953" : t;
       var pattern = /^[0-9]*$/;
       res = pattern.test(query) ? (await getList(query)).playlist.trackIds : (await search(query.split("##")[0], query.split("##")[1])).result.songs;
       that.$parent.list = [];
-      res.map(async function (item) {
+
+      res.map(async function (item,index) {
         let r = (await getDetail(item.id)).songs[0];
-        that.$parent.list.push({ index: i++, song: r.name, singer: r.ar[0].name, id: item.id });
+        that.$parent.list.push({ song: r.name, singer: r.ar[0].name, id: item.id,picUrl:r.al.picUrl });
+        if(index==0) that.$store.commit('showInfo',{ song: r.name, singer: r.ar[0].name, id: item.id,picUrl:r.al.picUrl })
       });
       this.$refs.searchBar.disabled = false;
       this.$refs.searchBtn.disabled = false;
       this.$refs.searchBtn.innerHTML = "Go!";
+      // this.$parent.index = 0
     },
 
     File() {
       const file = document.querySelector("#upload-btn").files[0];
       const reader = new FileReader();
       var that = this;
-
-      reader.addEventListener(
-        "load",
-        function () {
-          // 将图像文件转换为 base64 字符串
-          that.background = reader.result;
-        },
-        false
-      );
+      reader.addEventListener("load", () => {
+        that.background = reader.result; // 将图像文件转换为 base64 字符串
+      });
       if (file) {
         reader.readAsDataURL(file);
       }
@@ -162,7 +157,7 @@ export default {
       this.$parent.loop = this.loop;
     },
     volume() {
-      this.$parent.volume = this.volume;
+      document.querySelector('#mmAudio').volume = this.volume/100;
     },
   },
 };
