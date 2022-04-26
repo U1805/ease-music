@@ -1,11 +1,12 @@
 <template>
   <div class="background" id="player">
-    <login-w :qr="qr" @clearTimer='clear'></login-w>
-    <play-list :list="list" ></play-list>
-    <Vue3DraggableResizable :draggable="true" :resizable="false" style="border:none;" :x="500" :y="250">
+    <error-window></error-window>
+    <login-w :qr="qr" @clearTimer="clear"></login-w>
+    <play-list :list="list"></play-list>
+    <Vue3DraggableResizable :draggable="true" :resizable="false" style="border: none" :x="500" :y="250">
       <main-body :id="id" :index="index" ref="child" :loop="loop" :volume="volume" :list="list" @changeIndex="changeMsgFn"></main-body>
     </Vue3DraggableResizable>
-    <play-setting ref='timer'></play-setting>
+    <play-setting ref="timer"></play-setting>
   </div>
 </template>
 
@@ -14,6 +15,7 @@ import MainBody from "./components/MainBody.vue";
 import PlaySetting from "./components/PlaySetting.vue";
 import PlayList from "./components/PlayList.vue";
 import LoginW from "./components/LoginW.vue";
+import ErrorWindow from "./components/ErrorWindow.vue";
 export default {
   name: "App",
   data() {
@@ -29,19 +31,19 @@ export default {
     changeMsgFn(value) {
       this.index = value;
     },
-    clear(){
-      this.$refs.timer.clearT()
-    }
+    clear() {
+      this.$refs.timer.clearT();
+    },
   },
   components: {
     MainBody,
     PlaySetting,
     PlayList,
     LoginW,
+    ErrorWindow,
   },
   computed: {
     id: function () {
-      // console.log(this.list)
       if (this.list[0]) {
         return this.list[this.index]["id"];
       }

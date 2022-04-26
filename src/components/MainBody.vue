@@ -1,6 +1,6 @@
 <template>
   <div class="player">
-    <audio ref="mmAudio" :src="src" @timeupdate="current" @ended="end" :volume="volume / 100"></audio>
+    <audio ref="mmAudio" :src="src" @timeupdate="current" @ended="end" :volume="volume / 100" @error="error"></audio>
     <div class="top">
       <img class="cover" :src="picUrl" />
       <div class="control">
@@ -88,7 +88,6 @@ export default {
       this.$emit("changeIndex", this.index);
     },
     next() {
-      // console.log(this.list.length)
       this.index = (this.index + 1) % this.list.length;
       this.$emit("changeIndex", this.index);
     },
@@ -114,7 +113,6 @@ export default {
       console.log(this.info);
     },
     end() {
-      // alert("The video has ended");
       if (this.loop == "") {
         this.currentTime = 0;
         this.$refs.playBtn.className = "bi bi-pause-circle";
@@ -125,17 +123,12 @@ export default {
         this.$refs.mmAudio.play();
       } else {
         this.index = Math.floor(Math.random() * this.list.length);
-        // this.$parent.index = this.index
         this.$emit("changeIndex", this.index);
       }
     },
     playLike() {
-      // alert(123)
       var that = this,
         i = 0;
-      // this.$refs.mmAudio.pause();
-      // this.$emit('changeIndex', 0)
-      // this.$refs.mmAudio.pause();
       that.$parent.$parent.list = [];
       let arr = Array.from(this.Liked).map((item) => item[0]);
       arr.map(async function (item) {
@@ -143,8 +136,13 @@ export default {
         that.$parent.$parent.list.push({ index: i++, song: r.name, singer: r.ar[0].name, id: item });
         console.log(that.$parent.$parent.list);
       });
-      // this.$refs.mmAudio.play();
       this.$emit("changeIndex", 0);
+    },
+    error() {
+      var toastLiveExample = document.getElementById("liveToast");
+      var toast = new bootstrap.Toast(toastLiveExample);
+      toast.show();
+      setTimeout(this.next(), 3000);
     },
   },
 

@@ -64,7 +64,7 @@ export default {
       background: "",
       loop: "",
       volume: 40,
-      time:null
+      time: null,
     };
   },
 
@@ -97,8 +97,8 @@ export default {
         }
       }, 3000);
     },
-    clearT(){
-      clearTimeout(this.timer)
+    clearT() {
+      clearTimeout(this.timer);
     },
     async getMyList() {
       this.res = await getUserList(localStorage.getItem("uid"));
