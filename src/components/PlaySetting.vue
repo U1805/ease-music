@@ -64,12 +64,12 @@ export default {
       background: "",
       loop: "",
       volume: 40,
+      time:null
     };
   },
 
   methods: {
     login: async function () {
-      let timer;
       getLoginStatus();
       const res = await requests({
         url: `https://netease-cloud-music-api-khaki-chi.vercel.app/login/qr/key?timerstamp=${Date.now()}`,
@@ -81,7 +81,7 @@ export default {
         withCredentials: true, //关键
       });
       this.$parent.qr = res2.data.qrimg;
-      timer = setInterval(async () => {
+      this.timer = setInterval(async () => {
         const statusRes = await checkStatus(key);
         if (statusRes.code === 800) {
           alert("二维码已过期,请重新获取");
@@ -96,6 +96,9 @@ export default {
           window.location.reload();
         }
       }, 3000);
+    },
+    clearT(){
+      clearTimeout(this.timer)
     },
     async getMyList() {
       this.res = await getUserList(localStorage.getItem("uid"));
@@ -145,6 +148,7 @@ export default {
         reader.readAsDataURL(file);
       }
     },
+
     changeVolume() {
       this.volume = document.querySelector("#v-range").value;
     },

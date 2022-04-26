@@ -4,13 +4,13 @@
         <div class="modal-content">
         <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLabel">登录</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="clearTimer"></button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="fun"></button>
         </div>
         <div class="modal-body">
             <img id="qrImg" class="rounded mx-auto d-block" :src='qr'/>
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">close</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="fun">close</button>
         </div>
         </div>
     </div>
@@ -21,9 +21,9 @@
 export default {
     props:['qr'],
     methods:{
-        clearTimer(){
-            
-        }
+    fun(){
+      this.$emit("clearTimer")
+    },
     }
 }
 </script>

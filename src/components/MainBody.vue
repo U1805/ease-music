@@ -61,7 +61,7 @@ export default {
       Liked: new Map(),
     };
   },
-  props: ["id", "isLike", "loop", "volume"],
+  props: ["id", "isLike", "loop", "volume", "list"],
 
   methods: {
     second2time(s) {
@@ -84,12 +84,13 @@ export default {
     },
     prev() {
       this.index--;
-      if (this.index < 0) this.index = this.$parent.list.length - 1;
-      this.$parent.index = this.index;
+      if (this.index < 0) this.index = this.list.length - 1;
+      this.$emit("changeIndex", this.index);
     },
     next() {
-      this.index = (this.index + 1) % this.$parent.list.length;
-      this.$parent.index = this.index;
+      // console.log(this.list.length)
+      this.index = (this.index + 1) % this.list.length;
+      this.$emit("changeIndex", this.index);
     },
     like() {
       let idd = this.id;
@@ -123,22 +124,27 @@ export default {
         this.currentTime = 0;
         this.$refs.mmAudio.play();
       } else {
-        this.$parent.index = Math.floor(Math.random() * this.$parent.list.length);
+        this.index = Math.floor(Math.random() * this.list.length);
+        // this.$parent.index = this.index
+        this.$emit("changeIndex", this.index);
       }
     },
     playLike() {
       // alert(123)
       var that = this,
         i = 0;
-      that.$parent.list = [];
+      // this.$refs.mmAudio.pause();
+      // this.$emit('changeIndex', 0)
+      // this.$refs.mmAudio.pause();
+      that.$parent.$parent.list = [];
       let arr = Array.from(this.Liked).map((item) => item[0]);
-      // console.log(arr)
       arr.map(async function (item) {
         let r = (await getDetail(item)).songs[0];
-        // console.log(that.$parent.list)
-        that.$parent.list.push({ index: i++, song: r.name, singer: r.ar[0].name, id: item });
+        that.$parent.$parent.list.push({ index: i++, song: r.name, singer: r.ar[0].name, id: item });
+        console.log(that.$parent.$parent.list);
       });
-      // this.$parent.index = 0
+      // this.$refs.mmAudio.play();
+      this.$emit("changeIndex", 0);
     },
   },
 

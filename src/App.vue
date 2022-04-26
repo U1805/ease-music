@@ -1,9 +1,11 @@
 <template>
   <div class="background" id="player">
-    <login-w :qr="qr"></login-w>
-    <play-list :list="list"></play-list>
-    <main-body :id="id" :index="index" ref="child" :loop="loop" :volume="volume"></main-body>
-    <play-setting></play-setting>
+    <login-w :qr="qr" @clearTimer='clear'></login-w>
+    <play-list :list="list" ></play-list>
+    <Vue3DraggableResizable :draggable="true" :resizable="false" style="border:none;" :x="500" :y="250">
+      <main-body :id="id" :index="index" ref="child" :loop="loop" :volume="volume" :list="list" @changeIndex="changeMsgFn"></main-body>
+    </Vue3DraggableResizable>
+    <play-setting ref='timer'></play-setting>
   </div>
 </template>
 
@@ -23,7 +25,14 @@ export default {
       volume: 40,
     };
   },
-  methods: {},
+  methods: {
+    changeMsgFn(value) {
+      this.index = value;
+    },
+    clear(){
+      this.$refs.timer.clearT()
+    }
+  },
   components: {
     MainBody,
     PlaySetting,
@@ -33,19 +42,21 @@ export default {
   computed: {
     id: function () {
       // console.log(this.list)
-      if(this.list[0]){
-      return this.list[this.index]["id"];
+      if (this.list[0]) {
+        return this.list[this.index]["id"];
       }
     },
   },
   watch: {
     index() {
-      this.$nextTick(() => this.$refs.child.detail());
-      this.$nextTick(() => this.$refs.child.play());
-      if (this.$refs.child.Liked.get(this.id) == null) {
-        document.querySelector("#likeBtn").classList.remove("active");
-      } else {
-        document.querySelector("#likeBtn").classList.add("active");
+      if (this.list[0]) {
+        this.$nextTick(() => this.$refs.child.detail());
+        this.$nextTick(() => this.$refs.child.play());
+        if (this.$refs.child.Liked.get(this.id) == null) {
+          document.querySelector("#likeBtn").classList.remove("active");
+        } else {
+          document.querySelector("#likeBtn").classList.add("active");
+        }
       }
     },
   },
