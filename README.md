@@ -16,7 +16,7 @@ PC 端为主，没有适配移动端；也没有考虑浏览器兼容
 >
 > nprogress
 
-[演示地址](https://easy-music.vercel.app/)
+[演示地址](https://ease-music.vercel.app/)
 
 ## 界面：
 
