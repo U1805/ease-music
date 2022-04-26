@@ -1,6 +1,6 @@
 <template>
   <div class="player">
-    <audio id='mmAudio' ref="mmAudio" :src="src" @timeupdate="current" @ended="end" @error="error"></audio>
+    <audio id="mmAudio" ref="mmAudio" :src="src" @timeupdate="current" @ended="end" @error="error"></audio>
     <div class="top">
       <img class="cover" :src="info.picUrl" />
       <div class="control">
@@ -47,20 +47,19 @@ export default {
       totalTime: 0,
     };
   },
-  props: ["likelist",'loop'],
-  computed: {      
-    info:function(){
-        return this.$store.state.info
-      },
-      src: function () {
-        return getAudio(this.info.id);
-      },
-      isLiked: function(){
-        if(this.likelist == undefined) return false
-        return this.likelist.indexOf(this.info.id)!=-1
-      },
-
+  props: ["likelist", "loop"],
+  computed: {
+    info: function () {
+      return this.$store.state.info;
     },
+    src: function () {
+      return getAudio(this.info.id);
+    },
+    isLiked: function () {
+      if (this.likelist == undefined) return false;
+      return this.likelist.indexOf(this.info.id) != -1;
+    },
+  },
   methods: {
     second2time(time) {
       let m = parseInt(time / 60);
@@ -72,7 +71,7 @@ export default {
 
     play() {
       this.$nextTick(() => (this.$refs.mmAudio.paused ? this.$refs.mmAudio.play() : this.$refs.mmAudio.pause()));
-      this.$nextTick(()=>(this.$refs.playBtn.className = this.$refs.mmAudio.paused  ? "bi bi-play-circle":"bi bi-pause-circle"))
+      this.$nextTick(() => (this.$refs.playBtn.className = this.$refs.mmAudio.paused ? "bi bi-play-circle" : "bi bi-pause-circle"));
     },
     prev() {
       this.$parent.$parent.index--;
@@ -82,10 +81,10 @@ export default {
       this.$parent.$parent.index = (this.$parent.$parent.index + 1) % this.$parent.$parent.list.length;
     },
     like() {
-      if(this.isLiked){
-        this.$parent.$parent.Liked.splice(this.$parent.$parent.Liked.indexOf(this.info.id), 1)
-      }else{
-        this.$parent.$parent.Liked.push(this.info.id)
+      if (this.isLiked) {
+        this.$parent.$parent.Liked.splice(this.$parent.$parent.Liked.indexOf(this.info.id), 1);
+      } else {
+        this.$parent.$parent.Liked.push(this.info.id);
       }
     },
     current() {
@@ -98,14 +97,18 @@ export default {
     end() {
       switch (this.loop) {
         case "":
-          this.currentTime = 0;break;
+          this.currentTime = 0;
+          break;
         case "listloop":
-          this.next();break;
+          this.next();
+          break;
         case "loop":
           this.currentTime = 0;
-          this.$refs.mmAudio.play();break;
+          this.$refs.mmAudio.play();
+          break;
         case "random":
-          this.$parent.$parent.index = Math.floor(Math.random() * this.$parent.$parent.list.length);break;
+          this.$parent.$parent.index = Math.floor(Math.random() * this.$parent.$parent.list.length);
+          break;
         default:
           console.log("loop error");
       }
@@ -116,9 +119,9 @@ export default {
       toast.show();
       setTimeout(this.next(), 3000);
     },
-    playLike(){
-      if(this.isLiked) this.$emit('playLikes')
-    }
+    playLike() {
+      if (this.isLiked) this.$emit("playLikes");
+    },
   },
   watch: {
     isLiked() {
