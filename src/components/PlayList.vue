@@ -4,7 +4,7 @@
       <div class="card card-body" style="width: 300px">
         <div class="row pre-scrollable">
           <ol class="list-group">
-            <li class="list-group-item" style="cursor: pointer" v-for="(item, index) in list" :value="item.name" @click="changeSong">
+            <li class="list-group-item" style="cursor: pointer" v-for="(item, index) in list" :value="index" @click="changeSong">
               {{ item.song }}-{{ item.singer }}
             </li>
           </ol>
