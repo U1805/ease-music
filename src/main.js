@@ -26,7 +26,10 @@ app.use(Vue3DraggableResizable);
 app.use(store);
 app.mount("#app");
 
-window.oncontextmenu = function (e) {
-  //取消默认的浏览器自带右键 很重要！！
-  e.preventDefault();
-};
+window.oncontextmenu =()=>false 
+window.ondragstart=()=>false 
+window.onselectstart =()=>false 
+window.onselect=()=>false 
+window.oncopy=()=>false 
+window.onbeforecopy=()=>false 
+window.onmouseup=()=>false 

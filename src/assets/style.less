@@ -26,23 +26,14 @@ body {
 }
 
 .background {
+  position: absolute;
   .wh(100vw,100vh);
-  .flex-r(@just:space-between);
   background-color: #dfe7ef;
   font-family: "Bitter", serif;
   background-attachment: fixed;
   background-size: cover;
   z-index: -10;
-}
-.background:after{
-    content: "";
-    .wh(100vw,100vh);
-    position: absolute;
-    left:0;
-    top:0;
-    background: inherit;
-    filter: blur(10px);
-    z-index: -9;
+  filter: blur(3px);
 }
 
 .bi {
@@ -54,6 +45,11 @@ body {
   font-size: 90px;
   color: white;
   text-shadow: 8px 8px 18px #a9b6c4;
+}
+
+.wrap{
+  .wh(100vw,100vh);
+  .flex-r(@just:space-between);
 }
 
 .player {

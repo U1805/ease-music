@@ -8,10 +8,19 @@
           <button class="btn btn-light" disabled>酷我音乐</button>
         </div>
         <div class="input-group mb-3">
-          <span class="input-group-text">背景</span>
+          <span class="input-group-text" data-bs-toggle="collapse" href="#collapseExample" style="cursor: pointer;">背景</span>
           <input type="text" class="form-control" placeholder="Url" v-model="background" />
           <button class="btn btn-light bi bi-camera" id="upload-img" onclick="document.querySelector('#upload-btn').click()"></button>
           <input type="file" id="upload-btn" @change="File" />
+          <div class="collapse" id="collapseExample">
+            <div class="card card-body">
+              <label class="form-check-label" for="flexCheckChecked"> 毛玻璃 </label>
+              <div class="input-group mb-3">
+                <div class="input-group-text"><input class="form-check-input mt-0" type="checkbox" v-model="checked" checked /></div>
+                <input type="text" class="form-control" v-model="blur" /><span class="input-group-text">px</span>
+              </div>
+            </div>
+          </div>
         </div>
         <div class="input-group mb-3">
           <span class="input-group-text">音量</span>
@@ -28,7 +37,6 @@
         </div>
         <div class="input-group mb-3">
           <span class="input-group-text" id="basic-addon1" @click="getMyList">歌单 <span class="tooltiptext">登录后单击可导入歌单</span></span>
-
           <input class="form-control" list="datalistOptions" id="exampleDataList" placeholder="搜索歌曲##数量" ref="searchBar" />
           <datalist id="datalistOptions">
             <option v-for="item in Mylist" :value="item.listId">
@@ -56,6 +64,8 @@ export default {
       loop: "",
       volume: 40,
       time: null,
+      checked: true,
+      blur: 3,
     };
   },
 
@@ -145,13 +155,21 @@ export default {
 
   watch: {
     background() {
-      document.querySelector(".background").style.backgroundImage = `url(${this.background})`;
+      document.querySelector("#app > div.background").style.backgroundImage = `url(${this.background})`;
     },
     loop() {
       this.$parent.loop = this.loop;
     },
     volume() {
       document.querySelector("#mmAudio").volume = this.volume / 100;
+    },
+    checked() {
+      let n = this.checked ? this.blur : 0;
+      document.querySelector("#app > div.background").style.filter = `blur(${n}px)`;
+    },
+    blur() {
+      let n = this.checked ? this.blur : 0;
+      document.querySelector("#app > div.background").style.filter = `blur(${n}px)`;
     },
   },
 };
@@ -163,6 +181,11 @@ export default {
 }
 #upload-btn {
   display: none;
+}
+.form-check-input:checked {
+  @color:rgb(118, 134, 156);
+  background-color: @color;
+  border-color: @color;
 }
 #basic-addon1 {
   cursor: pointer;

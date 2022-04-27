@@ -1,12 +1,14 @@
 <template>
-  <div class="background" id="player">
+  <div class="background">
+  </div>
+  <div  id="player" class="wrap">
     <error-window></error-window>
     <login-w :qr="qr" @clearTimer="clear"></login-w>
-    <play-list :list="list"></play-list>
+    <play-list :list="list" id='list'></play-list>
     <Vue3DraggableResizable id='drag' :draggable="true" :resizable="false" style="border: none">
       <main-body ref="child" :loop="loop" :likelist="Liked" @playLikes="likelistt"></main-body>
     </Vue3DraggableResizable>
-    <play-setting ref="timer"></play-setting>
+    <play-setting ref="timer" id='set'></play-setting>
   </div>
 </template>
 
@@ -68,5 +70,8 @@ export default {
 #drag{
   margin-top: calc(50vh - 260px);
   margin-left: calc(50vw - 210px);
+}
+#list{
+
 }
 </style>
