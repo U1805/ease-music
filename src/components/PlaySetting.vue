@@ -8,10 +8,10 @@
           <button class="btn btn-light" disabled>酷我音乐</button>
         </div>
         <div class="input-group mb-3">
-          <span class="input-group-text" data-bs-toggle="collapse" href="#collapseExample" style="cursor: pointer;">背景</span>
+          <span class="input-group-text" data-bs-toggle="collapse" href="#collapseExample" style="cursor: pointer">背景</span>
           <input type="text" class="form-control" placeholder="Url" v-model="background" />
           <button class="btn btn-light bi bi-camera" id="upload-img" onclick="document.querySelector('#upload-btn').click()"></button>
-          <input type="file" id="upload-btn" @change="File" accept="image/*"/>
+          <input type="file" id="upload-btn" @change="File" accept="image/*" />
           <div class="collapse" id="collapseExample">
             <div class="card card-body">
               <label class="form-check-label" for="flexCheckChecked"> 毛玻璃 </label>
@@ -82,7 +82,7 @@ export default {
         withCredentials: true, //关键
       });
       this.$parent.qr = res2.data.qrimg;
-      var that = this
+      var that = this;
       that.timer = setInterval(async () => {
         const statusRes = await checkStatus(key);
         if (statusRes.code == 800) {
@@ -103,7 +103,12 @@ export default {
       clearTimeout(this.timer);
     },
     async getMyList() {
+      if (localStorage.getItem("uid") == null) {
+        alert("请先登录！");
+        return;
+      }
       this.res = await getUserList(localStorage.getItem("uid"));
+
       let Mylist = [];
       this.res.playlist.map((item) => {
         Mylist.push({ listId: item.id, listName: item.name });
@@ -121,25 +126,32 @@ export default {
       let t = document.querySelector("#exampleDataList").value;
       let query = t == "" ? "6722704953" : t;
       var pattern = /^[0-9]*$/;
-      res = pattern.test(query) ? (await getList(query)).playlist.trackIds : (await search(query.split("##")[0], query.split("##")[1])).result.songs;
-      that.$parent.list = [];
+      try {
+        res = pattern.test(query) ? (await getList(query)).songs : (await search(query.split("##")[0], query.split("##")[1])).result.songs;
+        that.$parent.list = [];
 
-      Promise.all(res.map(async function (item, index) {
-        let r = (await getDetail(item.id)).songs[0];
-        that.$parent.list.push({ song: r.name, singer: r.ar[0].name, id: item.id, picUrl: r.al.picUrl });
-        if (index == 0) that.$store.commit("showInfo", { song: r.name, singer: r.ar[0].name, id: item.id, picUrl: r.al.picUrl });
-      }))
-      .then(()=>{
-      this.$refs.searchBar.disabled = false;
-      this.$refs.searchBtn.disabled = false;
-      this.$refs.searchBtn.innerHTML = "Go!";})
+        Promise.all(
+          res.map(async function (item, index) {
+            let r = (await getDetail(item.id)).songs[0];
+            that.$parent.list.push({ song: r.name, singer: r.ar[0].name, id: item.id, picUrl: r.al.picUrl });
+            if (index == 0) that.$store.commit("showInfo", { song: r.name, singer: r.ar[0].name, id: item.id, picUrl: r.al.picUrl });
+          })
+        ).then(() => {
+          that.$refs.searchBar.disabled = false;
+          that.$refs.searchBtn.disabled = false;
+          that.$refs.searchBtn.innerHTML = "Go!";
+        });
+      } catch (err) {
+        alert("出问题惹，换一个试试吧");
+        window.location.reload();
+      }
     },
 
     File() {
       const file = document.querySelector("#upload-btn").files[0];
-      if(file.size>1048576){
-        alert("目前不建议上传大于 1MB 的图片！")
-        return 
+      if (file.size > 1048576) {
+        alert("目前不建议上传大于 1MB 的图片！");
+        return;
       }
       const reader = new FileReader();
       var that = this;
@@ -186,7 +198,7 @@ export default {
   display: none;
 }
 .form-check-input:checked {
-  @color:rgb(118, 134, 156);
+  @color:rgba(118, 134, 156);
   background-color: @color;
   border-color: @color;
 }

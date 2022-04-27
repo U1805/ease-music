@@ -1,7 +1,7 @@
 import requests from "./request.js";
 
 export const getList = (id) => {
-  return requests({ url: `/playlist/detail?id=${id}`, method: "get" });
+  return requests({ url: `/playlist/track/all?id=${id}&limit=500`, method: "get" });
 };
 
 export const getUserList = (uid) => {
