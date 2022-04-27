@@ -11,7 +11,7 @@
           <span class="input-group-text" data-bs-toggle="collapse" href="#collapseExample" style="cursor: pointer;">背景</span>
           <input type="text" class="form-control" placeholder="Url" v-model="background" />
           <button class="btn btn-light bi bi-camera" id="upload-img" onclick="document.querySelector('#upload-btn').click()"></button>
-          <input type="file" id="upload-btn" @change="File" />
+          <input type="file" id="upload-btn" @change="File" accept="image/*"/>
           <div class="collapse" id="collapseExample">
             <div class="card card-body">
               <label class="form-check-label" for="flexCheckChecked"> 毛玻璃 </label>
@@ -124,7 +124,7 @@ export default {
       res = pattern.test(query) ? (await getList(query)).playlist.trackIds : (await search(query.split("##")[0], query.split("##")[1])).result.songs;
       that.$parent.list = [];
 
-      res.map(async function (item, index) {
+      await res.map(async function (item, index) {
         let r = (await getDetail(item.id)).songs[0];
         that.$parent.list.push({ song: r.name, singer: r.ar[0].name, id: item.id, picUrl: r.al.picUrl });
         if (index == 0) that.$store.commit("showInfo", { song: r.name, singer: r.ar[0].name, id: item.id, picUrl: r.al.picUrl });
@@ -137,6 +137,10 @@ export default {
 
     File() {
       const file = document.querySelector("#upload-btn").files[0];
+      if(file.size>1048576){
+        alert("目前不建议上传大于 1MB 的图片！")
+        return 
+      }
       const reader = new FileReader();
       var that = this;
       reader.addEventListener("load", () => {
