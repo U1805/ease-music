@@ -3,7 +3,7 @@
     <error-window></error-window>
     <login-w :qr="qr" @clearTimer="clear"></login-w>
     <play-list :list="list"></play-list>
-    <Vue3DraggableResizable :draggable="true" :resizable="false" style="border: none" :x="500" :y="250">
+    <Vue3DraggableResizable id='drag' :draggable="true" :resizable="false" style="border: none">
       <main-body ref="child" :loop="loop" :likelist="Liked" @playLikes="likelistt"></main-body>
     </Vue3DraggableResizable>
     <play-setting ref="timer"></play-setting>
@@ -64,4 +64,9 @@ export default {
 };
 </script>
 
-<style></style>
+<style lang='less' scoped>
+#drag{
+  margin-top: calc(50vh - 260px);
+  margin-left: calc(50vw - 210px);
+}
+</style>
