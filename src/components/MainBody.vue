@@ -128,6 +128,9 @@ export default {
     info() {
       this.$nextTick(() => (this.isLiked ? this.$refs.likeBtn.classList.add("active") : this.$refs.likeBtn.classList.remove("active")));
     },
+    isLiked(){
+      this.$nextTick(() => (this.isLiked ? this.$refs.likeBtn.classList.add("active") : this.$refs.likeBtn.classList.remove("active")));
+    }
   },
 };
 </script>
