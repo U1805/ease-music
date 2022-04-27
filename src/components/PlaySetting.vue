@@ -63,7 +63,7 @@ export default {
       background: "",
       loop: "",
       volume: 40,
-      time: null,
+      timer: null,
       checked: true,
       blur: 3,
     };
@@ -82,16 +82,17 @@ export default {
         withCredentials: true, //关键
       });
       this.$parent.qr = res2.data.qrimg;
-      this.timer = setInterval(async () => {
+      var that = this
+      that.timer = setInterval(async () => {
         const statusRes = await checkStatus(key);
-        if (statusRes.code === 800) {
+        if (statusRes.code == 800) {
           alert("二维码已过期,请重新获取");
-          clearInterval(timer);
+          clearInterval(that.timer);
         }
-        if (statusRes.code === 803) {
+        if (statusRes.code == 803) {
           // 这一步会返回cookie
           // console.log(JSON.stringify(statusRes, null, 2))
-          clearInterval(timer);
+          clearInterval(that.timer);
           alert("授权登录成功");
           await getLoginStatus();
           window.location.reload();

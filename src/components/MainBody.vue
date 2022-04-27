@@ -76,8 +76,7 @@ export default {
       this.$nextTick(() => (this.$refs.playBtn.className = this.$refs.mmAudio.paused ? "bi bi-play-circle" : "bi bi-pause-circle"));
     },
     prev() {
-      this.$parent.$parent.index--;
-      if (this.$parent.$parent.index < 0) this.index = this.$parent.$parent.list.length - 1;
+      this.$parent.$parent.index = (this.$parent.$parent.index+this.$parent.$parent.list.length-1)%this.$parent.$parent.list.length
     },
     next() {
       this.$parent.$parent.index = (this.$parent.$parent.index + 1) % this.$parent.$parent.list.length;
