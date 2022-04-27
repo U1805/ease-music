@@ -127,9 +127,8 @@ export default {
       let query = t == "" ? "6722704953" : t;
       var pattern = /^[0-9]*$/;
       try {
-        res = pattern.test(query) ? (await getList(query)).songs : (await search(query.split("##")[0], query.split("##")[1])).result.songs;
+        res = pattern.test(query) ? (await getList(query)).playlist.trackIds : (await search(query.split("##")[0], query.split("##")[1])).result.songs;
         that.$parent.list = [];
-
         Promise.all(
           res.map(async function (item, index) {
             let r = (await getDetail(item.id)).songs[0];
@@ -198,7 +197,7 @@ export default {
   display: none;
 }
 .form-check-input:checked {
-  @color:rgba(118, 134, 156);
+  @color:rgb(118, 134, 156);
   background-color: @color;
   border-color: @color;
 }

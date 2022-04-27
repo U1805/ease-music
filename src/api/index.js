@@ -1,15 +1,15 @@
 import requests from "./request.js";
 
 export const getList = (id) => {
-  return requests({ url: `/playlist/track/all?id=${id}&limit=500`, method: "get" });
+  return requests({ url: `/playlist/detail?id=${id}`, method: "get", withCredentials: true });
 };
 
 export const getUserList = (uid) => {
-  return requests({ url: `/user/playlist?uid=${uid}`, method: "get" });
+  return requests({ url: `/user/playlist?uid=${uid}`, method: "get", withCredentials: true });
 };
 
 export const getDetail = async (id) => {
-  return requests({ url: `/song/detail?ids=${id}`, method: "get" });
+  return requests({ url: `/song/detail?ids=${id}`, method: "get", withCredentials: true });
 };
 
 export const getAudio = (id) => {
@@ -19,7 +19,7 @@ export const getAudio = (id) => {
 export const search = (key, num = 30) => {
   var pattern = /^[0-9]*$/;
   num = pattern.test(num) ? num : 30;
-  return requests({ url: `/search?keywords=${key}&limit=${num}`, method: "get" });
+  return requests({ url: `/search?keywords=${key}&limit=${num}`, method: "get", withCredentials: true });
 };
 
 //登录函数

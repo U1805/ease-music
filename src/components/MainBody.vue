@@ -2,7 +2,7 @@
   <div class="player">
     <audio id="mmAudio" ref="mmAudio" :src="src" @timeupdate="current" @ended="end" @error="error"></audio>
     <div class="top">
-      <img class="cover" :src="info.picUrl" />
+      <img class="cover" :src="info.picUrl + '?param=300y300'" />
       <div class="control">
         <div class="control-item">
           <span class="circle" id="basic-addon3">
@@ -52,6 +52,7 @@ export default {
   props: ["likelist", "loop"],
   computed: {
     info: function () {
+      console.log(this.$store.state.info)
       return this.$store.state.info;
     },
     src: function () {
@@ -76,7 +77,7 @@ export default {
       this.$nextTick(() => (this.$refs.playBtn.className = this.$refs.mmAudio.paused ? "bi bi-play-circle" : "bi bi-pause-circle"));
     },
     prev() {
-      this.$parent.$parent.index = (this.$parent.$parent.index+this.$parent.$parent.list.length-1)%this.$parent.$parent.list.length
+      this.$parent.$parent.index = (this.$parent.$parent.index + this.$parent.$parent.list.length - 1) % this.$parent.$parent.list.length;
     },
     next() {
       this.$parent.$parent.index = (this.$parent.$parent.index + 1) % this.$parent.$parent.list.length;
@@ -128,9 +129,9 @@ export default {
     info() {
       this.$nextTick(() => (this.isLiked ? this.$refs.likeBtn.classList.add("active") : this.$refs.likeBtn.classList.remove("active")));
     },
-    isLiked(){
+    isLiked() {
       this.$nextTick(() => (this.isLiked ? this.$refs.likeBtn.classList.add("active") : this.$refs.likeBtn.classList.remove("active")));
-    }
+    },
   },
 };
 </script>
