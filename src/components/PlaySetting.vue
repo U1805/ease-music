@@ -145,7 +145,7 @@ export default {
 
   watch: {
     background() {
-      document.querySelector("body").style.backgroundImage = `url(${this.background})`;
+      document.querySelector(".background").style.backgroundImage = `url(${this.background})`;
     },
     loop() {
       this.$parent.loop = this.loop;
