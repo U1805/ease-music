@@ -124,15 +124,15 @@ export default {
       res = pattern.test(query) ? (await getList(query)).playlist.trackIds : (await search(query.split("##")[0], query.split("##")[1])).result.songs;
       that.$parent.list = [];
 
-      await res.map(async function (item, index) {
+      Promise.all(res.map(async function (item, index) {
         let r = (await getDetail(item.id)).songs[0];
         that.$parent.list.push({ song: r.name, singer: r.ar[0].name, id: item.id, picUrl: r.al.picUrl });
         if (index == 0) that.$store.commit("showInfo", { song: r.name, singer: r.ar[0].name, id: item.id, picUrl: r.al.picUrl });
-      });
+      }))
+      .then(()=>{
       this.$refs.searchBar.disabled = false;
       this.$refs.searchBtn.disabled = false;
-      this.$refs.searchBtn.innerHTML = "Go!";
-      // this.$parent.index = 0
+      this.$refs.searchBtn.innerHTML = "Go!";})
     },
 
     File() {
