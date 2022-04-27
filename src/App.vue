@@ -13,7 +13,6 @@
   <error-window></error-window>
   <login-w :qr="qr" @clearTimer="clear"></login-w>
   <instruct-w></instruct-w>
-  <!-- Modal -->
 </template>
 
 <script>
@@ -39,7 +38,7 @@ export default {
     return {
       index: 0,
       list: [{ song: "Stay Light", singer: "Niha", id: 29392941, picUrl: "http://p1.music.126.net/inLyNRNb8tdNYV8Fhn9UQA==/109951165777935908.jpg" }], //song, singer, id, picurl
-      Liked: [],
+      Liked: this.fetchLike(),
       qr: "",
       loop: "",
     };
@@ -49,7 +48,7 @@ export default {
       this.$refs.timer.clearT();
     },
     likelistt() {
-      console.log('Like List : '+ this.Liked)
+      console.log("Like List : " + this.Liked);
       document.querySelector("#play_button").className = "bi bi-play-circle";
       document.querySelector("#mmAudio").pause();
       var that = this;
@@ -59,7 +58,13 @@ export default {
         that.list.push({ song: r.name, singer: r.ar[0].name, id: item, picUrl: r.al.picUrl });
         if (index == 0) that.$store.commit("showInfo", { song: r.name, singer: r.ar[0].name, id: item, picUrl: r.al.picUrl });
       });
-      // that.index = 0
+    },
+    saveLike() {
+      localStorage.setItem("my_favourite", JSON.stringify(this.Liked));
+    },
+    fetchLike() {
+      if (JSON.parse(localStorage.getItem("my_favourite")) == null) return [];
+      return JSON.parse(localStorage.getItem("my_favourite"));
     },
   },
 
@@ -67,6 +72,12 @@ export default {
     index() {
       this.$store.commit("showInfo", this.list[this.index]);
       this.$refs.child.play();
+    },
+    Liked: {
+      handler(val, oldVal) {
+        localStorage.setItem("my_favourite", JSON.stringify(val));
+      },
+      deep: true,
     },
   },
 };

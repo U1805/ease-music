@@ -126,7 +126,7 @@ export default {
     },
   },
   watch: {
-    isLiked() {
+    info() {
       this.$nextTick(() => (this.isLiked ? this.$refs.likeBtn.classList.add("active") : this.$refs.likeBtn.classList.remove("active")));
     },
   },
@@ -181,8 +181,8 @@ export default {
     border-color: transparent @color transparent transparent;
   }
 }
-.bi-skip-start-fill
-,.bi-skip-end-fill{
-font-size: 40px
+.bi-skip-start-fill,
+.bi-skip-end-fill {
+  font-size: 40px;
 }
 </style>
