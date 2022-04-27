@@ -30,7 +30,7 @@ export default {
   data() {
     return {
       index: 0,
-      list: [], //song, singer, id, picurl
+      list: [{ song: "Stay Light", singer: "Niha", id: 29392941, picUrl: "http://p1.music.126.net/inLyNRNb8tdNYV8Fhn9UQA==/109951165777935908.jpg" }], //song, singer, id, picurl
       Liked: [],
       qr: "",
       loop: "",

@@ -3,49 +3,41 @@
     <div class="collapse collapse-horizontal" id="setting">
       <div class="card card-body" style="width: 300px">
         <div class="input-group mb-3">
-          <span class="input-group-text" id="basic-addon1">登录</span>
-          <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#exampleModal" @click="login">网易云音乐</button>
-          <button type="button" class="btn btn-light" disabled>酷我音乐</button>
+          <span class="input-group-text">登录</span>
+          <button class="btn btn-light" data-bs-toggle="modal" data-bs-target="#exampleModal" @click="login">网易云音乐</button>
+          <button class="btn btn-light" disabled>酷我音乐</button>
         </div>
         <div class="input-group mb-3">
-          <span class="input-group-text" id="basic-addon1">背景</span>
-          <input type="text" class="form-control" placeholder="Url" aria-label="0-100" aria-describedby="basic-addon1" v-model="background" />
-          <button class="btn btn-light bi bi-camera" type="button" id="upload-img" onclick="document.querySelector('#upload-btn').click()"></button>
+          <span class="input-group-text">背景</span>
+          <input type="text" class="form-control" placeholder="Url" v-model="background" />
+          <button class="btn btn-light bi bi-camera" id="upload-img" onclick="document.querySelector('#upload-btn').click()"></button>
           <input type="file" id="upload-btn" @change="File" />
         </div>
         <div class="input-group mb-3">
-          <span class="input-group-text" id="basic-addon1">音量</span>
-          <input type="text" class="form-control" placeholder="0-100" aria-label="0-1" aria-describedby="basic-addon1" v-model="volume" id="volume" />
+          <span class="input-group-text">音量</span>
+          <input type="text" class="form-control" placeholder="0-100" v-model="volume" id="volume" />
           <input type="range" class="form-range" id="v-range" min="0" max="100" :value="volume" @mousemove="changeVolume" />
         </div>
         <div class="input-group mb-3">
-          <span class="input-group-text" id="basic-addon1">播放</span>
-          <select class="form-select" aria-label="Default select example" v-model="loop">
+          <span class="input-group-text">播放</span>
+          <select class="form-select" v-model="loop">
             <option value="loop">单曲循环</option>
             <option value="listloop">列表循环</option>
             <option value="random">随机播放</option>
           </select>
         </div>
         <div class="input-group mb-3">
-          <span
-            class="input-group-text"
-            id="basic-addon1"
-            data-toggle="tooltip"
-            data-placement="left"
-            title="登录后单击可导入歌单"
-            style="cursor: pointer"
-            @click="getMyList"
-            >歌单</span
-          >
+          <span class="input-group-text" id="basic-addon1" @click="getMyList">歌单 <span class="tooltiptext">登录后单击可导入歌单</span></span>
+
           <input class="form-control" list="datalistOptions" id="exampleDataList" placeholder="搜索歌曲##数量" ref="searchBar" />
           <datalist id="datalistOptions">
             <option v-for="item in Mylist" :value="item.listId">
               {{ item.listName }}
             </option>
           </datalist>
-          <button type="button" class="btn btn-light" @click="search" ref="searchBtn">Go!</button>
+          <button class="btn btn-light" @click="search" ref="searchBtn">Go!</button>
         </div>
-        <button type="button" class="btn btn-light" data-bs-toggle="collapse" data-bs-target="#playlist" aria-expanded="false">播放列表</button>
+        <button class="btn btn-light" data-bs-toggle="collapse" data-bs-target="#playlist">播放列表</button>
       </div>
     </div>
   </div>
@@ -118,10 +110,12 @@ export default {
       let t = document.querySelector("#exampleDataList").value;
       let query = t == "" ? "6722704953" : t;
       var pattern = /^[0-9]*$/;
+      console.log(await getList(query));
       res = pattern.test(query) ? (await getList(query)).playlist.trackIds : (await search(query.split("##")[0], query.split("##")[1])).result.songs;
       that.$parent.list = [];
 
       res.map(async function (item, index) {
+        console.log(index);
         let r = (await getDetail(item.id)).songs[0];
         that.$parent.list.push({ song: r.name, singer: r.ar[0].name, id: item.id, picUrl: r.al.picUrl });
         if (index == 0) that.$store.commit("showInfo", { song: r.name, singer: r.ar[0].name, id: item.id, picUrl: r.al.picUrl });
@@ -163,11 +157,45 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="less">
 #upload-img {
   font-size: 15px;
 }
 #upload-btn {
   display: none;
+}
+#basic-addon1 {
+  cursor: pointer;
+  .tooltiptext {
+    font-size: 13px;
+    visibility: hidden;
+    width: 150px;
+    background-color: rgba(0, 0, 0, 0.559);
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    /* 定位 */
+    position: absolute;
+    z-index: 1;
+    right: 105%;
+    /* 淡入 */
+    opacity: 0;
+    transition: opacity 1s;
+  }
+  &:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+  }
+  .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 100%;
+    margin-top: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent transparent rgba(0, 0, 0, 0.559);
+  }
 }
 </style>

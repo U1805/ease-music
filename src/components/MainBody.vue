@@ -5,23 +5,25 @@
       <img class="cover" :src="info.picUrl" />
       <div class="control">
         <div class="control-item">
-          <span class="circle">
+          <span class="circle" id="basic-addon3">
             <i class="bi bi-heart-fill" ref="likeBtn" id="likeBtn" @click="like" @contextmenu="playLike"></i>
+            <span class="tooltiptext">右击💖播放收藏</span>
+          </span>
+        </div>
+        <div class="control-item">
+          <span class="circle" id="basic-addon2">
+            <i class="bi bi-music-note-list" data-bs-toggle="collapse" data-bs-target="#setting"></i>
+            <span class="tooltiptext">控制台</span>
           </span>
         </div>
         <div class="control-item">
           <span class="circle">
-            <i class="bi bi-music-note-list" data-bs-toggle="collapse" data-bs-target="#setting" aria-expanded="false" aria-controls="setting"></i>
+            <i class="bi bi-skip-start-fill" @click="prev"></i>
           </span>
         </div>
         <div class="control-item">
           <span class="circle">
-            <i class="bi bi-skip-start-fill" style="font-size: 40px" @click="prev"></i>
-          </span>
-        </div>
-        <div class="control-item">
-          <span class="circle">
-            <i class="bi bi-skip-end-fill" style="font-size: 40px" @click="next"></i>
+            <i class="bi bi-skip-end-fill" @click="next"></i>
           </span>
         </div>
         <div class="control-play"><i id="play_button" class="bi bi-play-circle" @click="play" ref="playBtn"></i></div>
@@ -130,3 +132,57 @@ export default {
   },
 };
 </script>
+
+<style scoped lang="less">
+#upload-img {
+  font-size: 15px;
+}
+#upload-btn {
+  display: none;
+}
+#basic-addon2 {
+  .tooltip(70px);
+}
+#basic-addon3 {
+  .tooltip(120px);
+}
+.tooltip(@w) {
+  @color:rgba(0, 0, 0, 0.559);
+  cursor: pointer;
+  .tooltiptext {
+    font-size: 13px;
+    visibility: hidden;
+    width: @w;
+    background-color: @color;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    /* 定位 */
+    position: absolute;
+    z-index: 10;
+    left: 90%;
+    /* 淡入 */
+    opacity: 0;
+    transition: opacity 1s;
+  }
+  &:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+  }
+  .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: 100%;
+    margin-top: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent @color transparent transparent;
+  }
+}
+.bi-skip-start-fill
+,.bi-skip-end-fill{
+font-size: 40px
+}
+</style>
