@@ -1,15 +1,19 @@
 <template>
-  <div class="background">
-  </div>
-  <div  id="player" class="wrap">
-    <error-window></error-window>
-    <login-w :qr="qr" @clearTimer="clear"></login-w>
-    <play-list :list="list" id='list'></play-list>
-    <Vue3DraggableResizable id='drag' :draggable="true" :resizable="false" style="border: none">
+  <div class="background"></div>
+  <div id="player" class="wrap">
+    <play-list :list="list" id="list"></play-list>
+    <Vue3DraggableResizable id="drag" :draggable="true" :resizable="false" style="border: none">
       <main-body ref="child" :loop="loop" :likelist="Liked" @playLikes="likelistt"></main-body>
     </Vue3DraggableResizable>
-    <play-setting ref="timer" id='set'></play-setting>
+    <play-setting ref="timer" id="set"></play-setting>
+    <Vue3DraggableResizable id="myBtn" :draggable="true" :resizable="false" style="border: none">
+      <i class="bi bi-question-circle-fill" data-bs-toggle="modal" data-bs-target="#instruct"></i>
+    </Vue3DraggableResizable>
   </div>
+  <error-window></error-window>
+  <login-w :qr="qr" @clearTimer="clear"></login-w>
+  <instruct-w></instruct-w>
+  <!-- Modal -->
 </template>
 
 <script>
@@ -18,6 +22,7 @@ import PlaySetting from "./components/PlaySetting.vue";
 import PlayList from "./components/PlayList.vue";
 import LoginW from "./components/LoginW.vue";
 import ErrorWindow from "./components/ErrorWindow.vue";
+import InstructW from "./components/InstructW.vue";
 import { getDetail } from "@/api";
 
 export default {
@@ -28,6 +33,7 @@ export default {
     PlayList,
     LoginW,
     ErrorWindow,
+    InstructW,
   },
   data() {
     return {
@@ -43,7 +49,7 @@ export default {
       this.$refs.timer.clearT();
     },
     likelistt() {
-      // console.log(this.Liked)
+      console.log('Like List : '+ this.Liked)
       document.querySelector("#play_button").className = "bi bi-play-circle";
       document.querySelector("#mmAudio").pause();
       var that = this;
@@ -66,12 +72,13 @@ export default {
 };
 </script>
 
-<style lang='less' scoped>
-#drag{
+<style lang="less" scoped>
+#drag {
   margin-top: calc(50vh - 260px);
   margin-left: calc(50vw - 210px);
 }
-#list{
-
+#myBtn {
+  margin-top: calc(100vh - 80px);
+  margin-left: calc(100vw - 80px);
 }
 </style>

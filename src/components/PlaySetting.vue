@@ -120,12 +120,10 @@ export default {
       let t = document.querySelector("#exampleDataList").value;
       let query = t == "" ? "6722704953" : t;
       var pattern = /^[0-9]*$/;
-      console.log(await getList(query));
       res = pattern.test(query) ? (await getList(query)).playlist.trackIds : (await search(query.split("##")[0], query.split("##")[1])).result.songs;
       that.$parent.list = [];
 
       res.map(async function (item, index) {
-        console.log(index);
         let r = (await getDetail(item.id)).songs[0];
         that.$parent.list.push({ song: r.name, singer: r.ar[0].name, id: item.id, picUrl: r.al.picUrl });
         if (index == 0) that.$store.commit("showInfo", { song: r.name, singer: r.ar[0].name, id: item.id, picUrl: r.al.picUrl });
