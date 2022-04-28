@@ -99,6 +99,7 @@ export default {
     end() {
       switch (this.loop) {
         case "":
+          this.$refs.playBtn.className = "bi bi-play-circle"
           this.currentTime = 0;
           break;
         case "listloop":
@@ -119,7 +120,8 @@ export default {
       var toastLiveExample = document.getElementById("liveToast");
       var toast = new bootstrap.Toast(toastLiveExample);
       toast.show();
-      setTimeout(this.next(), 3000);
+      var that = this
+      setTimeout(that.next(), 3000);
     },
     playLike() {
       if (this.isLiked) this.$emit("playLikes");

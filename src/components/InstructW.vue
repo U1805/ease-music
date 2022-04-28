@@ -15,8 +15,9 @@
           <hr />
           <p>❗歌单导入时间由歌单大小决定，<scan style="color: pink">请耐性等待</scan></p>
           <p>❗请不要在列表没有更新完的情况下再次导入</p>
-          <p>🐛有 bug 请提交到这里→<a href="https://github.com/U1805/ease-music/issues">Issues</a></p>
-          <p class="text-end"><i class="bi bi-github"></i><a href="https://github.com/U1805/ease-music"> GitHub</a></p>
+          <p>😔服务器流量原因，新增歌单请求数最大1k的限制，同时请各位手下留情</p>
+          <p>🐛有 bug 或者好的想法请提交到这里→<a href="https://github.com/U1805/ease-music/issues" target="_blank">Issues</a></p>
+          <p class="text-end"><i class="bi bi-github"></i><a href="https://github.com/U1805/ease-music" target="_blank"> GitHub</a></p>
         </div>
       </div>
     </div>
