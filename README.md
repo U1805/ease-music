@@ -69,7 +69,7 @@ PC 端为主，没有适配移动端；也没有考虑浏览器兼容
 
 ## 版权说明
 
-该项目签署了MIT 授权许可，详情请参阅[LICENSE.md](./LICENSE.md)
+该项目签署了MIT 授权许可，详情请参阅[LICENSE.md](./LICENSE)
 
 ## 鸣谢
 
